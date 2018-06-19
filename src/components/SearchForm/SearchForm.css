@@ -1,0 +1,15 @@
+form.search {
+  overflow: auto;
+  margin-bottom: 10px;
+}
+
+form.search button[name="run-search"] {
+  float: left;
+  margin-bottom: 10px;
+}
+
+form.search button[name="clear-all"] {
+  float: left;
+  margin-bottom: 10px;
+  margin-left: 20px;
+}
