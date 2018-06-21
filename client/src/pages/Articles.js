@@ -2,9 +2,8 @@ import React, { Component } from "react";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
-// import { Input, SearchBtn, ClearBtn } from "../components/Form";
 import SearchForm from "../components/SearchForm";
-import SearchResults from "../components/SearchResults";
+import { SearchResults, SearchResultsItem } from "../components/SearchResults";
 
 class Articles extends Component {
   state = {
@@ -36,8 +35,8 @@ class Articles extends Component {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
-        this.setState({ articles: res.data, error: "" });
-        console.log(res.data);
+        this.setState({ articles: res.data.response.docs, error: "" });
+        console.log(res.data.response.docs);
       })
       .catch(err => this.setState({ error: err.message }));
   };
@@ -84,25 +83,26 @@ class Articles extends Component {
               {/* This main panel will hold each of the resulting articles */}
               <div className="panel-body" id="well-section-scraped">
                 {/* **** scraped articles **** */}
-                <SearchResults articles={this.state.articles} />
-                
-                {/* <div>
-                  {props.articles.map(article => (
-                    <article className="well" key={article._id}>
-                      <h3 className="articleHeadline">
-                        {article.headline}
-                      </h3>
-                      <h5>
-                        {article.byline}
-                      </h5>
-                      <h5>
-                        {article.pub_date}
-                      </h5>
-                      <a href={article.web_url} target="_blank">
-                      </a>
-                    </article>
-                  ))}
-                </div> */}
+
+                {!this.state.articles.length ? (
+                  <h1 className="text-center">
+                    No Articles to Display
+                  </h1>
+                ) : (
+                  <SearchResults>
+                    {this.state.articles.map(article => {
+                      return (
+                        <SearchResultsItem
+                          key={article._id}
+                          headline={article.headline}
+                          byline={article.byline || ""}
+                          web_url={article.web_url || ""}
+                          pub_date={article.pub_date || ""}
+                        />
+                      );
+                    })}
+                  </SearchResults>
+                )}
 
               </div>
             </div>

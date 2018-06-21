@@ -1,3 +1,7 @@
 ul.search-results img {
   margin: 0 auto;
 }
+
+.articleHeadline {
+  line-height: 1.5;
+}
