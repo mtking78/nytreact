@@ -3,7 +3,8 @@ import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
 import SearchForm from "../components/SearchForm";
-import { SearchResults, SearchResultsItem } from "../components/SearchResults";
+import { ScrapeList, ScrapeListItem } from "../components/ScrapeList";
+import DeleteBtn from "../components/DeleteBtn";
 
 class Articles extends Component {
   state = {
@@ -13,16 +14,15 @@ class Articles extends Component {
   };
 
   componentDidMount() {
-    // When the component mounts, load all the saved articles.
-    // this.loadSavedArticles();
+    this.loadArticles();
   }
 
-  // When the component mounts, get a list of recent articles.
-//   loadArticles = () => {
-//     API.getArticles()
-//       .then(res => this.setState({ articles: res.data }))
-//       .catch(err => console.log(err));
-//   };
+  // When the component mounts, get a list of saved articles.
+  loadArticles = () => {
+    API.getSavedArticles()
+      .then(res => this.setState({ articles: res.data }))
+      .catch(err => console.log(err));
+  };
 
   handleInputChange = event => {
     this.setState({ search: event.target.value });
@@ -39,6 +39,15 @@ class Articles extends Component {
         console.log(res.data.response.docs);
       })
       .catch(err => this.setState({ error: err.message }));
+  };
+
+  handleArticleSave = event => {
+    event.preventDefault();
+    API.saveArticle({
+      article: this.state.article
+    })
+      .then(res => this.loadArticles())
+      .catch(err => console.log(err));
   };
 
   render() {
@@ -89,19 +98,24 @@ class Articles extends Component {
                     No Articles to Display
                   </h1>
                 ) : (
-                  <SearchResults>
+                  <ScrapeList>
                     {this.state.articles.map(article => {
                       return (
-                        <SearchResultsItem
+                        <ScrapeListItem
                           key={article._id}
                           headline={article.headline}
                           byline={article.byline || ""}
                           web_url={article.web_url || ""}
                           pub_date={article.pub_date || ""}
-                        />
+                          onClick={this.handleArticleSave}
+                        >
+                          {/* <DeleteBtn onClick={() =>
+                            this.deleteArticle(article._id)
+                          } /> */}
+                        </ScrapeListItem>
                       );
                     })}
-                  </SearchResults>
+                  </ScrapeList>
                 )}
 
               </div>

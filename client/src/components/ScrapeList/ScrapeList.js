@@ -1,7 +1,7 @@
 import React from "react";
-import "./SearchResults.css";
+import "./ScrapeList.css";
 
-export const SearchResults = props => {
+export const ScrapeList = props => {
   return (
     <div>
       {props.children}
